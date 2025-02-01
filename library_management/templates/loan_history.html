@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Loan History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        nav {
+            background-color: #333;
+            padding: 1em;
+        }
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center; /* Align items to the center */
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        nav ul li a:hover {
+            color: #f4f4f4;
+            text-decoration: underline;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 28px;
+            color: #333;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        td {
+            background-color: #f9f9f9;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .action-buttons a {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            margin: 5px;
+            display: inline-block;
+        }
+        .action-buttons a:hover {
+            background-color: #45a049;
+        }
+        .status-returned {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .status-not-returned {
+            color: #f44336;
+            font-weight: bold;
+        }
+        .fine {
+            color: #f44336;
+            font-weight: bold;
+        }
+
+        /* Media Queries for responsiveness */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column; /* Stack navigation items vertically on smaller screens */
+                align-items: center;
+                padding: 10px;
+            }
+            nav ul li {
+                margin: 10px 0; /* Reduce space between nav items */
+            }
+            table {
+                font-size: 14px; /* Adjust font size for smaller screens */
+            }
+            .container {
+                width: 90%; /* Make container take more width on smaller screens */
+                padding: 15px; /* Reduce padding */
+            }
+            h1 {
+                font-size: 24px; /* Smaller title font */
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav ul li {
+                margin: 8px 0; /* Even smaller space for very small screens */
+            }
+            nav ul li a {
+                font-size: 16px;
+            }
+            table {
+                font-size: 12px; /* Smaller font size for very small screens */
+            }
+            .container {
+                width: 95%; /* Make container even smaller on very small screens */
+                padding: 10px; /* Even more reduced padding */
+            }
+            h1 {
+                font-size: 20px; /* Reduced title size */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <ul>
+            <li><a href="/Library">Home</a></li>
+            <li><a href="/book">Books</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
+
+    <!-- Loan History Section -->
+    <div class="container">
+        <h1>Your Loan History</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>Due Date</th>
+                    <th>Return Date</th>
+                    <th>Status</th>
+                    <th>Fine</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for loan in loans %}
+                <tr>
+                    <td>{{ loan.book.title }}</td>
+                    <td>{{ loan.due_date|date:"F j, Y" }}</td>  <!-- Format the due date -->
+                    <td>{{ loan.return_date|date:"F j, Y"|default:"Not Returned" }}</td>  <!-- Format return date -->
+                    <td class="{% if loan.is_returned %}status-returned{% else %}status-not-returned{% endif %}">
+                        {% if loan.is_returned %}Returned{% else %}Not Returned{% endif %}
+                    </td>
+                    <td class="fine">${{ loan.calculate_fine }}</td>
+                    <td class="action-buttons">
+                        {% if not loan.is_returned %}
+                        <a href="{% url 'return_book' loan.id %}">Return</a>
+                        {% else %}
+                        Returned
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #6e7dff, #3b91ea);
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        nav {
+            background-color: #2c3e50;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: flex-end; /* Aligns nav items to the right */
+        }
+        nav ul li {
+            margin: 0 25px;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: 500;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        nav ul li a:hover {
+            color: #f4f4f4;
+            transform: translateY(-3px);
+        }
+        .profile-container {
+            width: 80%;
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .profile-container:hover {
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .profile-header img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #2c3e50;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+        .profile-header img:hover {
+            transform: scale(1.05);
+        }
+        .profile-container h2 {
+            font-size: 36px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .profile-info {
+            font-size: 18px;
+            color: #555;
+            line-height: 1.8;
+        }
+        .profile-info p {
+            margin: 12px 0;
+        }
+        .profile-info strong {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 50px;
+            position: relative;
+            width: 100%;
+        }
+        footer p {
+            font-size: 14px;
+            font-weight: 300;
+        }
+
+        /* Media Queries for responsiveness */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column; /* Stack navigation items vertically on smaller screens */
+                align-items: center;
+                padding: 10px;
+            }
+            nav ul li {
+                margin: 10px 0; /* Reduce space between nav items */
+            }
+            nav ul li a {
+                font-size: 18px;
+            }
+            .profile-container {
+                width: 90%;
+                padding: 30px; /* Reduced padding for smaller screens */
+            }
+            .profile-header img {
+                width: 120px; /* Smaller image size */
+                height: 120px;
+            }
+            .profile-container h2 {
+                font-size: 28px; /* Adjusted font size for smaller screens */
+            }
+            .profile-info {
+                font-size: 16px; /* Adjusted font size for smaller screens */
+            }
+            footer p {
+                font-size: 12px; /* Smaller font size for footer text */
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav ul li {
+                margin: 8px 0; /* Even smaller space for very small screens */
+            }
+            nav ul li a {
+                font-size: 16px;
+            }
+            .profile-container {
+                width: 95%;
+                padding: 20px; /* Even more reduced padding */
+            }
+            .profile-header img {
+                width: 100px; /* Much smaller image */
+                height: 100px;
+            }
+            .profile-container h2 {
+                font-size: 24px; /* Reduced title size */
+            }
+            .profile-info {
+                font-size: 14px; /* Smaller font size for text */
+            }
+            footer p {
+                font-size: 10px; /* Smaller footer text */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <ul>
+            <li><a href="/Library">Home</a></li>
+            <li><a href="/book">Books</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
+
+    <!-- Profile Section -->
+    <div class="profile-container">
+        <div class="profile-header">
+            <!-- Placeholder Profile Image -->
+            {% load static %}
+            <img src="{% static "images/profile.jpg" %}" alt="Profile Picture">
+            <h2>{{ user.username }}</h2>
+        </div>
+        <div class="profile-info">
+            <p><strong>Name:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Member Since:</strong> {{ user.date_joined }}</p>
+        </div>
+
+
+        <!-- Borrowed Books Section -->
+        <div class="borrowed-books">
+            <h3>Borrowed Books</h3>
+            {% if loans %}
+                <ul>
+                    {% for loan in loans %}
+                        <li>
+                            <strong>{{ loan.book.title }}</strong><br>
+                            <em>Due Date:</em> {{ loan.due_date }}<br>
+                            <em>Author:</em> {{ loan.book.author }}<br>
+                            {% comment %} <a href="{% url 'return_book' loan.id %}">Return Book</a> <!-- Assuming you have a URL pattern for return --> {% endcomment %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>You have not borrowed any books yet.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Library Management System. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

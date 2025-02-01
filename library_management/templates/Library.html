@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <style>
+        /* Basic reset and setup */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar */
+        nav {
+            background-color: #333;
+            padding: 1em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        nav ul li a:hover {
+            color: #f4f4f4;
+            text-decoration: underline;
+        }
+
+        /* Search Bar Styles */
+        .search-container {
+            display: flex;
+            align-items: center;
+        }
+        .search-bar {
+            padding: 10px 20px;
+            width: 250px;
+            font-size: 16px;
+            border-radius: 25px 0 0 25px; /* Rounded left side */
+            border: 2px solid #2c3e50;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .search-bar:focus {
+            border-color: #6e7dff;
+        }
+        .search-button {
+            padding: 10px 20px;
+            background-color: #6e7dff;
+            color: white;
+            border: none;
+            border-radius: 0 25px 25px 0; /* Rounded right side */
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .search-button:hover {
+            background-color: #4a6fff;
+        }
+
+        /* Main Content */
+        .main-content {
+            text-align: center;
+            margin: 50px 0;
+            flex-grow: 1; /* Ensures this section takes up remaining space */
+        }
+        .main-content h1 {
+            font-size: 36px;
+            color: #333;
+        }
+        .main-content p {
+            font-size: 18px;
+            color: #555;
+        }
+
+        /* Image Gallery */
+        .image-gallery {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        .image-gallery img {
+            width: 200px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 50px;
+        }
+        footer p {
+            font-size: 14px;
+            font-weight: 300;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            nav ul {
+                font-size: 16px;
+            }
+
+            .search-bar {
+                width: 200px;
+                font-size: 14px;
+            }
+
+            .search-button {
+                font-size: 14px;
+            }
+
+            .main-content h1 {
+                font-size: 30px;
+            }
+
+            .main-content p {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                margin-bottom: 15px;
+            }
+
+            .search-container {
+                margin-left: 10px;
+                margin-top: 10px;
+            }
+
+            .search-bar {
+                width: 80%;
+                margin-bottom: 10px;
+            }
+
+            .search-button {
+                width: 80%;
+            }
+
+            .main-content h1 {
+                font-size: 28px;
+            }
+
+            .main-content p {
+                font-size: 16px;
+            }
+
+            .image-gallery {
+                gap: 15px;
+                justify-content: center;
+            }
+
+            .image-gallery img {
+                width: 180px;
+                height: 135px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                font-size: 14px;
+            }
+
+            nav ul li {
+                margin: 10px 0;
+            }
+
+            .search-container {
+                width: 100%;
+                margin-left: 10px;
+                margin-top: 10px;
+            }
+
+            .search-bar {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .search-button {
+                width: 100%;
+            }
+
+            .main-content h1 {
+                font-size: 24px;
+            }
+
+            .main-content p {
+                font-size: 14px;
+            }
+
+            .image-gallery {
+                gap: 10px;
+                justify-content: center;
+            }
+
+            .image-gallery img {
+                width: 160px;
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <ul>
+            <li><a href="/Library">Home</a></li>
+            <li><a href="/book">Books</a></li>
+            <li><a href="/loan_history">Loan History</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+        <!-- Search Bar in the Right Corner -->
+        <div class="search-container">
+            <form method="get" action="{% url 'book_list' %}">
+                <input type="text" name="search_query" class="search-bar" placeholder="Search for books, authors, or genres..." value="{{ request.GET.search_query }}">
+                <button type="submit" class="search-button">Search</button>
+            </form>
+        </div>
+    </nav>
+     <!-- Image Gallery -->
+     <div class="image-gallery" id="imageGallery">
+        <!-- Random library-related images will be loaded here -->
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1>Welcome to Our Library</h1>
+        <p>A book is a dream that you hold in your hand. Start your next journey with us.</p>
+        <p>Dive into the world of knowledge, creativity, and imagination. Our library is your starting point.</p>
+    </div>
+
+   
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-link-column">
+            <h4 style="font-size: 1.2em; margin-bottom: 15px;">About Us</h4>
+            <p style="font-size: 14px; line-height: 1.5; color: #ccc;">We are dedicated to providing the best library experience, helping users to easily borrow and return books while managing a vast collection effectively.</p>
+        </div>
+        <p>&copy; 2025 Library Management System. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Fetch random library-related images using the Picsum API
+        async function fetchLibraryImages() {
+            const url = 'https://picsum.photos/v2/list?page=1&limit=3'; // Fetch 3 random images
+
+            try {
+                const response = await fetch(url);
+                const images = await response.json();
+                const gallery = document.getElementById('imageGallery');
+
+                // Clear any previous images
+                gallery.innerHTML = '';
+
+                images.forEach(image => {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = image.download_url; // Use the download URL for the image
+                    imgElement.alt = 'Library Image';
+                    gallery.appendChild(imgElement);
+                });
+            } catch (error) {
+                console.error('Error fetching images:', error);
+            }
+        }
+
+        // Fetch library images when the page loads
+        window.onload = fetchLibraryImages;
+    </script>
+
+</body>
+</html>

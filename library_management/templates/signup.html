@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    
+    <!-- Google Font for stylish text -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #6c63ff, #5749d2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Container for the form */
+        .form-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 28px;
+            font-weight: 500;
+        }
+
+        /* Form styling */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        form input {
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            outline: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        form input:focus {
+            border-color: #6c63ff;
+            box-shadow: 0 2px 12px rgba(108, 99, 255, 0.4);
+        }
+
+        form button {
+            padding: 12px;
+            font-size: 16px;
+            background-color: #6c63ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        form button:hover {
+            background-color: #5749d2;
+            transform: translateY(-2px);
+        }
+
+        /* Additional text for login or actions below the form */
+        .additional-actions {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .additional-actions a {
+            color: #6c63ff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .additional-actions a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 500px) {
+            .form-container {
+                padding: 30px;
+            }
+
+            h2 {
+                font-size: 26px;
+            }
+
+            form input,
+            form button {
+                font-size: 14px;
+            }
+        }
+
+        /* Placeholder styling */
+        ::placeholder {
+            color: #aaa;
+        }
+
+        /* Error message styles */
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: -15px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Create Your Account</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            
+            <!-- Error message if there are form errors -->
+            {% if form.errors %}
+                <div class="error-message">
+                    Please fix the errors below and try again.
+                </div>
+            {% endif %}
+            
+            <button type="submit">Sign Up</button>
+        </form>
+
+        <div class="additional-actions">
+            <p>Already have an account? <a href="/login">Login</a></p>
+        </div>
+    </div>
+</body>
+</html>
